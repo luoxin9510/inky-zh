@@ -1,0 +1,16 @@
+# Upstream inkle/inky uses Git LFS for the inklecate compiler binaries.
+# This fork was created from the GitHub source ZIP, which contains only
+# the *LFS pointer files* (~130 bytes each), not the real binaries.
+# To keep this repository cloneable without LFS configured we therefore
+# do NOT re-enable LFS here. The pointer files are committed as plain
+# text and the original LFS rules are kept here only as a historical
+# reference:
+#
+#     app/main-process/ink/inklecate_* filter=lfs diff=lfs merge=lfs -text
+#     app/main-process/ink/inkjs-compatible/inklecate_* filter=lfs diff=lfs merge=lfs -text
+#
+# To actually run or package this fork you need the real inklecate
+# binaries. Get them from an official Inky release at
+# https://github.com/inkle/inky/releases  (download the matching OS
+# build and copy the inklecate_* files into the matching paths above)
+# or clone the upstream repository with `git lfs install` enabled.
