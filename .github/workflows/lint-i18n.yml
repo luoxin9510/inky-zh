@@ -1,0 +1,25 @@
+name: lint-i18n
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'app/main-process/i18n/**'
+      - 'scripts/lint-i18n.js'
+      - '.github/workflows/lint-i18n.yml'
+  pull_request:
+    paths:
+      - 'app/main-process/i18n/**'
+      - 'scripts/lint-i18n.js'
+      - '.github/workflows/lint-i18n.yml'
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate locale JSON and coverage
+        run: node scripts/lint-i18n.js
