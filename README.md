@@ -17,7 +17,14 @@
 > [`NOTICE.md`](./NOTICE.md) for full attribution and the list of changed
 > files. The upstream README follows below, unchanged.
 >
-> ### Quick start
+> ### Quick start — Windows users (no Node required)
+>
+> Grab the prebuilt Windows x64 build from the
+> **[Releases page](https://github.com/luoxin9510/inky-zh/releases/latest)**
+> (`Inky-zh-win64.zip`, ~213 MB), unzip anywhere, and double-click `Inky.exe`.
+> Then open `View → Language` → `简体中文` and choose **Restart Now**.
+>
+> ### Quick start — from source (Mac / Linux / Windows)
 >
 > ```bash
 > cd app
@@ -26,6 +33,9 @@
 > ```
 >
 > Then open `View → Language`, pick `简体中文`, and restart when prompted.
+> Note that the inklecate compiler binaries are not in this repo — see
+> [`app/main-process/ink/INKLECATE_BINARIES.md`](./app/main-process/ink/INKLECATE_BINARIES.md)
+> for how to get them before running from source.
 
 ---
 
