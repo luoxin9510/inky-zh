@@ -18,11 +18,12 @@ let autoCompleteDisabled = null; // default on
 let language = null;
 
 // Human-friendly names for locale codes shown in the Language menu.
+// zh-TW intentionally omitted: no zh-TW.json ships yet. Re-add once a
+// Traditional Chinese translation lands - see README "Contributing translations".
 const LANGUAGE_LABELS = {
     'en-US': '🇺🇸 English',
     'en-GB': '🇬🇧 English (UK)',
     'zh-CN': '🇨🇳 简体中文',
-    'zh-TW': '🇹🇼 繁體中文',
     'fi-FI': '🇫🇮 Suomi',
     'ru-RU': '🇷🇺 Русский',
     'fr-FR': '🇫🇷 Français',

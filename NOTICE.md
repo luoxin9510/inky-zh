@@ -58,3 +58,14 @@
 
 如 inkle Ltd.（原作者）希望我们调整署名方式，或希望本 fork 下架，
 请在本仓库 issues 中告知，我们会配合处理。
+
+---
+
+## 欢迎翻译贡献
+
+欢迎补充 **繁体中文（zh-TW）** 及其他语言。当前仅 zh-CN / fi-FI / ru-RU
+随包发布，繁体中文菜单项已移除以避免显示无对应翻译的死键。
+
+参与方式：见 README 的「为 Inky 贡献翻译」章节，或在
+[GitHub Issues](https://github.com/luoxin9510/inky-zh/issues) 中开
+issue 协调。
