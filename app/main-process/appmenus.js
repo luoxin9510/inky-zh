@@ -19,17 +19,17 @@ let language = null;
 
 // Human-friendly names for locale codes shown in the Language menu.
 const LANGUAGE_LABELS = {
-    'en-US': 'English',
-    'en-GB': 'English (UK)',
-    'zh-CN': '简体中文',
-    'zh-TW': '繁體中文',
-    'fi-FI': 'Suomi',
-    'ru-RU': 'Русский',
-    'fr-FR': 'Français',
-    'de-DE': 'Deutsch',
-    'es-ES': 'Español',
-    'ja-JP': '日本語',
-    'ko-KR': '한국어'
+    'en-US': '🇺🇸 English',
+    'en-GB': '🇬🇧 English (UK)',
+    'zh-CN': '🇨🇳 简体中文',
+    'zh-TW': '🇹🇼 繁體中文',
+    'fi-FI': '🇫🇮 Suomi',
+    'ru-RU': '🇷🇺 Русский',
+    'fr-FR': '🇫🇷 Français',
+    'de-DE': '🇩🇪 Deutsch',
+    'es-ES': '🇪🇸 Español',
+    'ja-JP': '🇯🇵 日本語',
+    'ko-KR': '🇰🇷 한국어'
 };
 
 
