@@ -231,6 +231,48 @@ Inky 内置了一份 **inklecate**——ink 的命令行编译器。
 如果某个语言文件缺失（或缺了某些 key），可以用下面的命令生成：
 `cd app && npm run generate-locale -- <locale> ./main-process/i18n/`。
 
+## 为 Inky 贡献翻译
+
+我们欢迎社区为 Inky 补充新语言或完善现有翻译。
+
+### 当前 locale 清单
+
+| Locale  | 语言         | 状态                                    |
+|---------|--------------|-----------------------------------------|
+| zh-CN   | 简体中文     | ✅ 完整（本 fork 主打语言）              |
+| fi-FI   | Suomi        | ✅ 上游维护                              |
+| ru-RU   | Русский      | ✅ 上游维护                              |
+| en-US   | English      | 源字符串（无需 JSON）                    |
+| zh-TW   | 繁體中文     | ❌ 尚无，欢迎贡献                        |
+| 其他    | —            | 欢迎 PR                                  |
+
+CI 会自动计算每个 locale 相对参考 locale 的 key 覆盖率（见
+`.github/workflows/lint-i18n.yml`）。低于 50% 会让 CI 失败，低于 80%
+会在 PR summary 中标黄提示。
+
+### 加新 locale 的步骤
+
+1. 在 `app/main-process/i18n/` 复制现有 JSON（推荐 `zh-CN.json` 作模板）
+   为 `<your-locale>.json`，例如 `zh-TW.json`、`fr-FR.json`。
+   也可以用 `cd app && npm run generate-locale -- <locale> ./main-process/i18n/`
+   生成空模板。
+2. 把 JSON 里每个 value 翻译成目标语言。**保留 key 不动**，保留
+   `%s`、`{0}`、HTML 标签等占位符。
+3. 编辑 `app/main-process/appmenus.js` 的 `LANGUAGE_LABELS`，加上你的
+   locale code → 显示名（建议带国旗 emoji，例如 `'🇹🇼 繁體中文'`）。
+4. 本地 `npm start` 跑一下，从 Language 菜单切到新 locale 验证显示。
+5. 提交 PR：在 [luoxin9510/inky-zh](https://github.com/luoxin9510/inky-zh)
+   开 Pull Request，描述里说明 locale 完成度（哪些 key 还没翻好都没关系）。
+
+### 协调与讨论
+
+目前没有专门的翻译平台。如果想协调多人合作、避免重复劳动，请在
+[GitHub Issues](https://github.com/luoxin9510/inky-zh/issues) 开一个
+issue，标题写 `[i18n] <locale>` 即可。
+
+> 未来若贡献者数量增长，可能会引入 Crowdin 或 POEditor 等翻译协作平台。
+> 目前仍以 GitHub PR 为唯一权威流程。
+
 ## 许可证
 
 **Inky** 和 **ink** 以 MIT 许可证发布。虽然原作者并不强制要求署名，但
