@@ -5,8 +5,13 @@
 >
 > - **In-app language selector** under `View → Language` (persisted across
 >   restarts; falls back to the OS locale when unset).
-> - **Completed Simplified Chinese (`zh-CN`) translation** (~100% coverage,
->   plus fixes for several mistranslations in the upstream `zh-CN.json`).
+> - **Completed Simplified Chinese (`zh-CN`) translation** of the UI (~100%
+>   coverage, plus fixes for several mistranslations in the upstream
+>   `zh-CN.json`).
+> - **Translated "Writing with ink" documentation to Simplified Chinese**
+>   (`WritingWithInk.zh-CN.md`, ~3400 lines, all ink code samples preserved
+>   verbatim). The in-app docs window picks the localized version
+>   automatically when the language is set to `简体中文`.
 >
 > Original work © inkle Ltd, declared MIT in `app/package.json`. See
 > [`NOTICE.md`](./NOTICE.md) for full attribution and the list of changed

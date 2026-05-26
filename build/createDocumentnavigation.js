@@ -1,4 +1,5 @@
 var fs = require('fs');
+var path = require('path');
 
 // Is there a more elegant way of achieving this?
 // mkdirp isn't found during the postinstall step because I guess we're in the wrong directory.
@@ -17,25 +18,42 @@ const mkdirp = require('../app/node_modules/mkdirp');
 
 var characters = ['#x', '?x-', '>x', '<x', ')x-', '(x-', ':x', ' x-', '.x', '/x-', "'x-", '`x', '"x', ',x', '!x-', '--x-', '--x-', '--x-', '--x-', '--x-', '--x-'];
 
+// Optional locale arg: `node createDocumentnavigation.js zh-CN`
+// produces window.zh-CN.html from WritingWithInk.zh-CN.md, with the iframe
+// pointed at embedded.zh-CN.html. No arg = build the default English files
+// (window.html, embedded.html) exactly as before.
+var locale = process.argv[2] || null;
+var suffix = locale ? '.' + locale : '';
+
+var prefabPath  = '../app/resources/Documentation/documentationWindowPrefab.html';
+var sourceMdPath = '../app/resources/Documentation/WritingWithInk' + suffix + '.md';
+var outputHtmlPath = '../app/renderer/documentation/window' + suffix + '.html';
+var embeddedFilename = 'embedded' + suffix + '.html';
+
 function initializeNavigation() {
-    fs.readFile('../app/resources/Documentation/documentationWindowPrefab.html', 'utf8', function (firstErr, html) {
+    fs.readFile(prefabPath, 'utf8', function (firstErr, html) {
         if (firstErr) {
             return console.log(firstErr);
         }
         var originalFile = html.split("<!--navigationentries-->");
 
-        fs.readFile('../app/resources/Documentation/WritingWithInk.md', 'utf8', function (secErr, data) {
+        fs.readFile(sourceMdPath, 'utf8', function (secErr, data) {
             if (secErr) {
+                if (secErr.code === 'ENOENT' && locale) {
+                    // Translation not provided for this locale - skip silently.
+                    console.log('Skipping documentation locale "' + locale + '": ' + sourceMdPath + ' not found.');
+                    return;
+                }
                 return console.log(secErr);
             }
 
             var output = originalFile[0];
 
             for (var line of data.split("\n")) {
-                
+
                 // checks whether the line does NOT contain a headline (indicated by the character '#'; the indexOf method will return -1 if the string does not contain the argument).
                 // The second part checks if the first character of a line is a '#' (a markdown header).
-                
+
                 if (line.indexOf('#') === -1 || line.charAt(0) != '#') {
                     continue;
                 }
@@ -57,14 +75,19 @@ function initializeNavigation() {
             }
             output = output + originalFile[1];
 
+            // Repoint iframe + JS at the localized embedded HTML file.
+            if (locale) {
+                output = output.split('embedded.html').join(embeddedFilename);
+            }
+
             mkdirp.sync("../app/renderer/documentation/");
-            
-            fs.writeFile('../app/renderer/documentation/window.html', output, function (thirdErr) {
+
+            fs.writeFile(outputHtmlPath, output, function (thirdErr) {
                 if (thirdErr) {
                     return console.log(thirdErr);
                 }
 
-                console.log('Documentation was created');
+                console.log('Documentation was created' + (locale ? ' (' + locale + ')' : ''));
             });
         });
     });

@@ -1,6 +1,8 @@
 const electron = require('electron');
 const BrowserWindow = electron.BrowserWindow;
+const fs = require('fs');
 const path = require("path");
+const i18n = require('./i18n/i18n.js');
 
 const electronWindowOptions = {
   width: 1000,
@@ -13,13 +15,27 @@ const electronWindowOptions = {
 
 var documentationWindow = null;
 
+// Pick window.<locale>.html if it has been built for the current locale,
+// otherwise fall back to the default English window.html.
+function resolveDocumentationFile() {
+  const docsDir = path.join(__dirname, '..', 'renderer', 'documentation');
+  const locale = i18n.currentLocale;
+  if (locale) {
+    const localized = path.join(docsDir, 'window.' + locale + '.html');
+    if (fs.existsSync(localized)) {
+      return localized;
+    }
+  }
+  return path.join(docsDir, 'window.html');
+}
+
 function DocumentationWindow(theme) {
 	electronWindowOptions.theme = theme;
   var w = new BrowserWindow(electronWindowOptions);
-  w.loadURL("file://" + __dirname + "/../renderer/documentation/window.html");
+  w.loadURL("file://" + resolveDocumentationFile());
 
   // w.webContents.openDevTools();
-	
+
   w.webContents.on("did-finish-load", () => {
     w.webContents.send("change-theme", theme);
     w.setMenu(null);
