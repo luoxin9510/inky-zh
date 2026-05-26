@@ -245,46 +245,66 @@ app.on('ready', function () {
             const current = ProjectWindow.getViewSettings().language || i18n.currentLocale;
             if (newLanguage === current) return;
 
-            const hasOpenWindows = ProjectWindow.all().length > 0;
-            const buttons = hasOpenWindows
-                ? [
-                    i18n._('Save and switch'),
-                    i18n._('Switch without saving'),
-                    i18n._('Cancel')
-                  ]
-                : [i18n._('Restart Now'), i18n._('Cancel')];
-
+            // Buttons: Hot switch (default, no restart) / Restart to refresh / Cancel.
+            // Restart remains a fallback in case some dynamically-built UI doesn't
+            // pick up the new locale via the hot path.
+            const HOT = 0, RESTART = 1, CANCEL = 2;
             dialog.showMessageBox({
-                type: 'warning',
-                buttons: buttons,
-                defaultId: 0,
-                cancelId: hasOpenWindows ? 2 : 1,
+                type: 'question',
+                buttons: [
+                    i18n._('Hot switch'),
+                    i18n._('Restart to refresh'),
+                    i18n._('Cancel')
+                ],
+                defaultId: HOT,
+                cancelId: CANCEL,
                 title: i18n._('Language changed'),
-                message: i18n._('Switching language requires restarting Inky.'),
-                detail: hasOpenWindows
-                    ? i18n._('Any unsaved changes in open windows will be lost unless you save first.')
-                    : i18n._('Restart Inky to apply the new language.'),
+                message: i18n._('How would you like to apply the new language?'),
+                detail: i18n._('Hot switch updates menus and labels immediately without losing unsaved work. Restart reloads the whole app for a clean slate.'),
             }).then(result => {
-                if (hasOpenWindows) {
-                    if (result.response === 2) return; // Cancel
+                if (result.response === CANCEL) return;
+
+                if (result.response === HOT) {
+                    // Save preference, swap locale tables, rebuild menu, notify renderers.
                     ProjectWindow.addOrChangeViewSetting('language', newLanguage);
-                    if (result.response === 0) {
-                        // Best-effort save via existing renderer save flow, then relaunch.
+                    i18n.switch(newLanguage);
+                    AppMenus.setLanguage(newLanguage);
+                    AppMenus.refresh();
+                    i18n.broadcastLocaleChange();
+                    return;
+                }
+
+                // RESTART branch - preserve previous unsaved-work protection.
+                const hasOpenWindows = ProjectWindow.all().length > 0;
+                if (!hasOpenWindows) {
+                    ProjectWindow.addOrChangeViewSetting('language', newLanguage);
+                    app.relaunch();
+                    app.exit(0);
+                    return;
+                }
+                dialog.showMessageBox({
+                    type: 'warning',
+                    buttons: [
+                        i18n._('Save and restart'),
+                        i18n._('Restart without saving'),
+                        i18n._('Cancel')
+                    ],
+                    defaultId: 0,
+                    cancelId: 2,
+                    title: i18n._('Restart Inky'),
+                    message: i18n._('Restarting will close all open windows.'),
+                    detail: i18n._('Any unsaved changes in open windows will be lost unless you save first.'),
+                }).then(r2 => {
+                    if (r2.response === 2) return;
+                    ProjectWindow.addOrChangeViewSetting('language', newLanguage);
+                    if (r2.response === 0) {
                         ProjectWindow.all().forEach(w => { try { w.save(); } catch (e) {} });
-                        setTimeout(() => {
-                            app.relaunch();
-                            app.exit(0);
-                        }, 2000);
+                        setTimeout(() => { app.relaunch(); app.exit(0); }, 2000);
                     } else {
                         app.relaunch();
                         app.exit(0);
                     }
-                } else {
-                    if (result.response === 1) return; // Cancel
-                    ProjectWindow.addOrChangeViewSetting('language', newLanguage);
-                    app.relaunch();
-                    app.exit(0);
-                }
+                });
             });
         }
     });

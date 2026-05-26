@@ -12,6 +12,16 @@ class i18n {
         });
     }
 
+    // Broadcast an 'i18n-changed' event to every BrowserWindow so renderers
+    // can re-translate their DOM without a process restart.
+    broadcastLocaleChange() {
+        const wins = electron.BrowserWindow.getAllWindows();
+        for (const w of wins) {
+            try { w.webContents.send('i18n-changed', this.currentLocale); }
+            catch (e) { /* window may be closing - ignore */ }
+        }
+    }
+
     // Called from main.js once user prefs are loaded.
     // `preferredLocale` overrides the OS locale when set.
     init(preferredLocale) {
