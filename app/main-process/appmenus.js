@@ -40,12 +40,19 @@ function buildLanguageSubmenu() {
     const locales = i18n.availableLocales();
     // Ensure English is offered even when no en-*.json file ships (source strings are English).
     const hasEnglish = locales.some(l => l.toLowerCase().startsWith('en'));
+    // If the current locale doesn't match any shipped JSON (e.g. the OS locale
+    // is fr-FR but no fr-FR.json ships), the UI is effectively rendering the
+    // English source strings - so highlight the English radio in that case
+    // rather than leaving every entry unchecked.
+    const currentMatchesAvailable = locales.includes(language);
+    const englishIsImplicitDefault =
+        !currentMatchesAvailable && (!language || !locales.some(l => l === language));
     const items = [];
     if (!hasEnglish) {
         items.push({
             label: LANGUAGE_LABELS['en-US'],
             type: 'radio',
-            checked: language === 'en-US' || language === null || language === '',
+            checked: language === 'en-US' || englishIsImplicitDefault,
             click: () => callbacks.changeLanguage && callbacks.changeLanguage('en-US')
         });
     }

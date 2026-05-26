@@ -327,7 +327,7 @@ ProjectWindow.getViewSettings = function() {
         let loadedSettings = JSON.parse(json);
 
         // if we've added a new setting or one is missing, make sure they all exist
-        for(requiredKey in viewSettingDefaults) {
+        for(let requiredKey in viewSettingDefaults) {
             if(loadedSettings[requiredKey] === undefined) {
                 loadedSettings[requiredKey] = viewSettingDefaults[requiredKey];
             }

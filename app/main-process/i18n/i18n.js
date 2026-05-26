@@ -37,9 +37,15 @@ class i18n {
         this.currentLocale = lang;
         const file = path.join(__dirname, `${lang}.json`)
         if (fs.existsSync(file)) {
-            // bust require cache so repeated switches re-read disk
-            delete require.cache[require.resolve(file)];
-            this.msgs = require(file);
+            try {
+                // bust require cache so repeated switches re-read disk
+                delete require.cache[require.resolve(file)];
+                this.msgs = require(file);
+            } catch (e) {
+                // Corrupted JSON or read error - fall back to English source strings.
+                console.error(`i18n: failed to load locale file ${file}:`, e);
+                this.msgs = {};
+            }
         } else {
             // English source strings are the fallback - clear table so _() returns msgid.
             this.msgs = {};
