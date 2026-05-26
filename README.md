@@ -1,30 +1,29 @@
-> ## Fork notice — Inky 中文版 / language-selector fork
+> ## Fork 说明 — Inky 中文版（inky-zh）/ 内置语言切换分支
 >
-> This repository is a community **fork** of [inkle/inky](https://github.com/inkle/inky)
-> at version `0.15.2`. It adds:
+> 本仓库是 [inkle/inky](https://github.com/inkle/inky) 在 `0.15.2` 版本上的
+> 社区 **fork**。相比上游它增加了：
 >
-> - **In-app language selector** under `View → Language` (persisted across
->   restarts; falls back to the OS locale when unset).
-> - **Completed Simplified Chinese (`zh-CN`) translation** of the UI (~100%
->   coverage, plus fixes for several mistranslations in the upstream
->   `zh-CN.json`).
-> - **Translated "Writing with ink" documentation to Simplified Chinese**
->   (`WritingWithInk.zh-CN.md`, ~3400 lines, all ink code samples preserved
->   verbatim). The in-app docs window picks the localized version
->   automatically when the language is set to `简体中文`.
+> - **应用内语言切换菜单**：`View → Language`（中文界面下为 `视图 → 语言`），
+>   选中后会持久化到 `view-settings.json`，重启后仍生效；未设置时回退到
+>   操作系统语言。
+> - **完整的简体中文（`zh-CN`）界面翻译**：覆盖约 100% 可提取字符串，并
+>   修正了上游 `zh-CN.json` 中若干漏译与错译。
+> - **《Writing with ink》文档简体中文翻译**（`WritingWithInk.zh-CN.md`，
+>   约 3400 行，所有 ink 代码示例均保留原文不译）。当界面语言设为 `简体中文`
+>   时，应用内置的文档窗口会自动加载中文版。
 >
-> Original work © inkle Ltd, declared MIT in `app/package.json`. See
-> [`NOTICE.md`](./NOTICE.md) for full attribution and the list of changed
-> files. The upstream README follows below, unchanged.
+> 原作品 © inkle Ltd，在 `app/package.json` 中声明为 MIT 许可证。完整的
+> 出处说明与改动文件清单见 [`NOTICE.md`](./NOTICE.md)。下方为上游 README
+> 原文，保持不变。
 >
-> ### Quick start — Windows users (no Node required)
+> ### 快速开始 — Windows 用户（无需安装 Node）
 >
-> Grab the prebuilt Windows x64 build from the
-> **[Releases page](https://github.com/luoxin9510/inky-zh/releases/latest)**
-> (`Inky-zh-win64.zip`, ~213 MB), unzip anywhere, and double-click `Inky.exe`.
-> Then open `View → Language` → `简体中文` and choose **Restart Now**.
+> 到 **[Releases 页面](https://github.com/luoxin9510/inky-zh/releases/latest)**
+> 下载预编译的 Windows x64 包（`Inky-zh-win64.zip`，约 213 MB），解压到
+> 任意位置，双击 `Inky.exe` 启动。然后打开 `View → Language` → `简体中文`，
+> 在弹出的对话框里选择 **立即重启**。
 >
-> ### Quick start — from source (Mac / Linux / Windows)
+> ### 快速开始 — 从源码运行（Mac / Linux / Windows）
 >
 > ```bash
 > cd app
@@ -32,10 +31,10 @@
 > npm start
 > ```
 >
-> Then open `View → Language`, pick `简体中文`, and restart when prompted.
-> Note that the inklecate compiler binaries are not in this repo — see
+> 启动后打开 `View → Language`，选 `简体中文`，按提示重启即可。
+> 注意 inklecate 编译器二进制并未包含在本仓库中——从源码运行前请先按
 > [`app/main-process/ink/INKLECATE_BINARIES.md`](./app/main-process/ink/INKLECATE_BINARIES.md)
-> for how to get them before running from source.
+> 的说明取得它们。
 
 ---
 
@@ -43,42 +42,61 @@
 
 # Inky
 
-**Inky** is an editor for [ink](http://www.inklestudios.com/ink), inkle's markup language for writing interactive narrative in games, as used in [80 Days](http://www.inklestudios.com/80days). It's an IDE (integrated development environment), because it gives you a single app that lets you play in the editor as you write, and fix any bugs in your code.
+**Inky** 是 [ink](http://www.inklestudios.com/ink) 的编辑器——ink 是 inkle
+出品的一种用于游戏交互式叙事的标记语言，曾被用于 [80 Days](http://www.inklestudios.com/80days)
+等作品。Inky 是一个集成开发环境（IDE）：在一个应用里既能写脚本，又能
+即时游玩、即时排错。
 
 ![](resources/screenshot.gif)
 
-## Features
+## 功能特性
 
-- **Play as you write**: The play pane remembers the choices that you made, so when Inky recompiles, it fast-forwards to the last point you were at in the flow.
-- **Syntax highlighting**
-- **As-you-type error highlighting**. Inky is constantly compiling, allowing you to fix errors early.
-- **Issue browser**: Lists errors, warnings and TODOs in your **ink**,  and allows you to jump to the exact line number and file in the source.
-- **Jump to definition**: Divert targets (like `-> theStreet`) are hyperlinked can be followed by alt-clicking.
-- **Support multi-file projects**: - Inky automatically infers your story's structure from the `INCLUDE` lines, meaning that there's no need for an additional project file. To create a new include file, simply type `INCLUDE yourfile.ink` where you want to include it.
-- **Export to JSON**: Although this isn't necessary if you're using the [ink-Unity-integration plugin](https://assetstore.unity.com/packages/tools/integration/ink-unity-integration-60055), Inky allows you to export to ink's compiled JSON format, which is especially useful in other ink runtime implementations, such as [inkjs](https://github.com/y-lohse/inkjs), for running **ink** on the web.
-- **File watching**: Modern text editors, including Inky, watch for changes to files on disk, so that if you change them it reflects those changes. This is especially helpful if you keep your **ink** in source control.
+- **边写边玩**：游玩面板会记住你已经做过的选择；Inky 重新编译后会快进到
+  上次停留的位置。
+- **语法高亮**
+- **即时错误高亮**：Inky 后台持续编译，让你在写代码的同时就发现错误。
+- **问题浏览器**：列出 **ink** 中的错误、警告与 TODO，并可一键跳转到对应
+  文件的具体行号。
+- **跳转到定义**：跳转目标（如 `-> theStreet`）会高亮为超链接，按住 Alt 点击
+  即可跳过去。
+- **多文件项目支持**：Inky 会自动根据 `INCLUDE` 行推断出整个故事的文件
+  结构，无需额外的项目文件。要新建包含文件，直接在想引用的位置写
+  `INCLUDE yourfile.ink` 即可。
+- **导出为 JSON**：如果你已经在用 [ink-Unity-integration 插件](https://assetstore.unity.com/packages/tools/integration/ink-unity-integration-60055)
+  其实不必导出；但导出为 ink 编译后的 JSON 格式仍很有用，特别是配合
+  其他 ink 运行时——比如用 [inkjs](https://github.com/y-lohse/inkjs) 在
+  网页上跑 **ink** 时。
+- **文件监听**：Inky 与现代文本编辑器一样会监听磁盘上的文件改动，外部
+  改动会自动同步进编辑器。如果你把 **ink** 文件纳入了版本控制，这点会
+  非常有用。
 
-## Project status
+## 项目状态
 
-Inky has been used extensively on multiple projects by different developers. Nevertheless, it isn't as robust or feature complete as many other text editors you may have used, since it's specialist software made by game developers in their spare time.
+Inky 已经被多个开发者用于多个实际项目。不过，相比你常用的那些文本编辑
+器，它在健壮性与功能完整度上都还差一截——它毕竟是游戏开发者们在业余
+时间打磨出的专用软件。
 
-The informal [TODO.md](TODO.md) lists some missing features and known issues. If you want to discuss one, or request a new fix or feature, please [create a github issue](http://www.github.com/inkle/inky/issues).
+非正式的 [TODO.md](TODO.md) 列出了一些缺失功能与已知问题。如果你想就
+其中某条展开讨论，或者提交新的 bug / 功能需求，请到上游
+[GitHub issues](http://www.github.com/inkle/inky/issues) 创建 issue。
 
-To keep up to date with the latest news about ink [sign up for the mailing list](http://www.inklestudios.com/ink#signup).
+想跟进 ink 的最新消息，可以[订阅邮件列表](http://www.inklestudios.com/ink#signup)。
 
-## Download
+## 下载
 
-### Mac, Windows and Linux
+### Mac、Windows 和 Linux
 
-[Download the latest release](http://www.github.com/inkle/inky/releases/latest)
+[下载最新版本](http://www.github.com/inkle/inky/releases/latest)
 
-## Project settings file
+## 项目设置文件
 
-**Warning: For the technically inclined - you need to understand what a JSON file is to do the following!**
+**提示：以下内容面向有一定技术基础的用户——你需要先了解什么是 JSON 文件。**
 
-To customise Inky settings for your specific ink project, create a JSON file with the same name as your main ink file, except with a `.settings.json` extension. For example, if your main ink file is called `my_great_story.ink`, then name your JSON file `my_great_story.settings.json`.
+如果想为某个具体的 ink 项目自定义 Inky 设置，可以新建一个 JSON 文件，
+名字与你的主 ink 文件相同，但扩展名改为 `.settings.json`。例如，主 ink
+文件叫 `my_great_story.ink`，那么设置文件就叫 `my_great_story.settings.json`。
 
-Here is an example settings file:
+下面是一个设置文件的示例：
 
     {
         "customInkSnippets": [
@@ -112,61 +130,76 @@ Here is an example settings file:
         "instructionPrefix": ">>>"
     }
 
-* `customInkSnippets` - this array allows your to add your own project-specific ink snippets to the Ink menu. There are three types of item you can add to the array:
-    * **An ink snippet**: Requires `name` for the name of the menu item and `ink` for the snippet of ink it will insert into the editor.
-    * **A separator**: Use `{"separator": true}` to add a horizonal line separator into the menu at this point.
-    * **A sub-menu**: To nest more snippets into a sub-menu, use `name` for the sub-menu name, and then `submenu` with another array in the same format.
+* `customInkSnippets` —— 这个数组允许你把项目专属的 ink 代码片段加进
+  Ink 菜单。数组里可以放三种条目：
+    * **ink 片段**：必须有 `name`（菜单项名称）和 `ink`（点击后插入到
+      编辑器的 ink 片段）。
+    * **分隔线**：用 `{"separator": true}` 在这个位置插入一条横线。
+    * **子菜单**：用 `name` 作为子菜单的标题，配合 `submenu`（同样格式
+      的数组）来嵌套更多片段。
 
 
-* `instructionPrefix` - A common convention is to use a particular text format in ink to instruct the game to perform certain actions rather than presenting the text verbatim to players.
+* `instructionPrefix` —— 在 ink 里使用某种固定文本格式来给游戏发指令是
+  一种常见做法，目的是让游戏执行某些动作，而不是把这些字面文本直接
+  显示给玩家。
 
-    For example, at inkle we would write something like `>>> CAMERA: BigSwoop` in ink. The `>>>` isn't directly built into ink, and this entire text is simply passed through as plain text. But we have custom game code to interpret it and turn it into an action that takes place in-game. To help support this within Inky, you can define an *instructionPrefix*, if you have a particular consistent way of writing these actions. 
-    
-    When Inky sees this, it will highlight the line of text both in the editor and player views, so that you can clearly see that it's not part of the game text itself.
+    例如，在 inkle 内部我们会在 ink 里写类似 `>>> CAMERA: BigSwoop` 这样
+  的指令。`>>>` 并非 ink 语法本身的一部分，整行内容会被 ink 当作普通文本
+  原样输出。但我们的游戏代码会去解析它，把它转译成一个游戏内的动作。
+  为了方便在 Inky 里处理这种约定，你可以通过 *instructionPrefix* 字段
+  指定你的指令前缀。
+
+    设置之后，Inky 会在编辑器视图和游玩视图里高亮这一类行，让你一眼看
+  出它们不是真正要显示给玩家的剧情文本。
 
 
-## Implementation details
+## 实现细节
 
-Inky is built using:
+Inky 使用以下技术构建：
 
-* [Electron](http://electron.atom.io/), a framework by GitHub to build cross-platform Desktop app using HTML, CSS and JavaScript.
-* [Ace](https://ace.c9.io/#nav=about), a full-featured code editor built for the web.
-* [Photon](http://photonkit.com/), for some of the components. However, the dependency could probably be removed, since its only used for small portions of the CSS.
+* [Electron](http://electron.atom.io/)——GitHub 出品的跨平台桌面应用框架，
+  允许用 HTML / CSS / JavaScript 开发桌面端。
+* [Ace](https://ace.c9.io/#nav=about)——一款功能完整的网页代码编辑器。
+* [Photon](http://photonkit.com/)——用于部分 UI 组件。其实这个依赖未必必
+  需，毕竟项目里只用了它的一小部分 CSS。
 
-Inky includes a copy of **inklecate**, the command line **ink** compiler.
+Inky 内置了一份 **inklecate**——ink 的命令行编译器。
 
-## Help develop Inky!
+## 帮助开发 Inky！
 
-Take a look at the [issues page](https://github.com/inkle/inky/issues) for an issue with a "help wanted" label. We try to provide some basic instructions on how to get started with the development of the feature whenever we add the label.
+去 [issues 页面](https://github.com/inkle/inky/issues) 找一个带 "help wanted"
+标签的 issue。我们通常会在加标签时给出一些上手该功能的基础说明。
 
-To build the project:
+构建项目的步骤：
 
-* Install [node.js](https://nodejs.org/en/) if you don't already have it
-* Clone the repo
-* On Mac, double-click the `INSTALL_AND_RUN.command` script. On Windows, open Powershell, cd into the app directory, and type `npm install`, then `npm start`.
-* For subsequent runs, if no npm packages have changed, you can run the `RUN.command` script on Mac, or type `npm start` in the shell (on Windows).
+* 如果还没装 [node.js](https://nodejs.org/en/)，先装好它
+* 克隆仓库
+* Mac 上双击 `INSTALL_AND_RUN.command` 脚本；Windows 上打开 Powershell，
+  cd 到 app 目录，依次运行 `npm install`、`npm start`。
+* 之后如果 npm 包没变，可以直接用 `RUN.command`（Mac）或者在命令行里
+  跑 `npm start`（Windows）。
 
 ### Linux
 
-Tested on a fresh **Ubuntu 16.04 LTS** VM installation (_equivalent processes should work for other distributions_)
+在全新的 **Ubuntu 16.04 LTS** 虚拟机上测试过（_其他发行版应当流程类似_）
 
-* Install build tools
+* 安装构建工具
 
 `sudo apt-get install -y dkms build-essential linux-headers-generic linux-headers-$(uname -r)`
 
-* Pre-requisites
+* 安装前置依赖
 
 `sudo apt install git`
 
 `sudo apt install curl`
 
-* Install node and npm
+* 安装 node 与 npm
 
 `curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -`
 
 `sudo apt-get install -y nodejs`
 
-* Install mono as per http://www.mono-project.com/download/stable/#download-lin
+* 按 http://www.mono-project.com/download/stable/#download-lin 的说明安装 mono
 
 `sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF`
 
@@ -176,30 +209,36 @@ Tested on a fresh **Ubuntu 16.04 LTS** VM installation (_equivalent processes sh
 
 `sudo apt-get install mono-complete`
 
-* Clone the inky repo
+* 克隆 inky 仓库
 
 `git clone https://github.com/inkle/inky.git`
 
-* Test inklecate_win with mono (_should output usage info_)
+* 用 mono 测试 inklecate_win（_正常情况下应该输出用法说明_）
 
 `mono app/main-process/ink/inklecate_win.exe`
 
-* Install and run inky
+* 安装并启动 inky
 
 `./INSTALL_AND_RUN.command`
 
-* For subsequent runs, if no npm packages have changed, launch inky as below (otherwise re-run previous step):
+* 之后如果 npm 包没变，直接这样启动即可（否则重跑上一步）：
 
 `./RUN.command`
 
-### Translation
+### 翻译
 
-Translation files are located under `app/main-process/i18n/`.  
-If a particular locale file is missing (or if it's missing some keys), you can generate it with the following command: `cd app && npm run generate-locale -- <locale> ./main-process/i18n/`.
+翻译文件位于 `app/main-process/i18n/`。  
+如果某个语言文件缺失（或缺了某些 key），可以用下面的命令生成：
+`cd app && npm run generate-locale -- <locale> ./main-process/i18n/`。
 
-## License
+## 许可证
 
-**Inky** and **ink** are released under the MIT license. Although we don't require attribution, we'd love to know if you decide to use **ink** a project! Let us know on [Twitter](http://www.twitter.com/inkleStudios) or [by email](mailto:info@inklestudios.com).
+**Inky** 和 **ink** 以 MIT 许可证发布。虽然原作者并不强制要求署名，但
+如果你打算把 **ink** 用到项目里，他们很愿意听到这个消息！可以通过
+[Twitter](http://www.twitter.com/inkleStudios) 或 [邮件](mailto:info@inklestudios.com)
+告知 inkle。
+
+以下为 MIT 许可证原文（法律文本传统上保留英文）：
 
 ### The MIT License (MIT)
 Copyright (c) 2016 inkle Ltd.
@@ -212,4 +251,4 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 -
 
-*Inky is named after a black cat based in Cambridge, UK.*
+*Inky 这个名字取自一只生活在英国剑桥的黑猫。*

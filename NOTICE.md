@@ -1,60 +1,60 @@
-# NOTICE
+# 出处说明（NOTICE）
 
-This repository is a **fork** of [inkle/inky](https://github.com/inkle/inky) at
-version **0.15.2**. The original work is:
+本仓库是 [inkle/inky](https://github.com/inkle/inky) 在版本 **0.15.2**
+上的 **fork**。原作品信息：
 
-- **Project**: Inky — an editor for the [ink](http://www.inklestudios.com/ink)
-  narrative scripting language
-- **Original author / copyright holder**: inkle Ltd ( https://www.inklestudios.com )
-- **Upstream repository**: https://github.com/inkle/inky
-- **Declared license**: MIT — the upstream `app/package.json` declares
-  `"license": "MIT"`. (At the time this fork was created the upstream
-  repository did not ship a separate `LICENSE` file; the MIT declaration in
-  `package.json` is the canonical license statement we are relying on for both
-  the upstream code and this fork.)
+- **项目**：Inky —— [ink](http://www.inklestudios.com/ink) 叙事脚本语言
+  的官方编辑器
+- **原作者 / 版权持有方**：inkle Ltd.（ https://www.inklestudios.com ）
+- **上游仓库**：https://github.com/inkle/inky
+- **声明的许可证**：MIT —— 上游 `app/package.json` 里声明了
+  `"license": "MIT"`。（本 fork 创建时，上游仓库并未单独提供 `LICENSE`
+  文件；`package.json` 中的 MIT 声明是我们对上游代码和本 fork 共同依据
+  的权威许可证声明。）
 
-## Changes in this fork
+## 本 fork 的改动
 
-Compared to upstream `0.15.2`, this fork adds:
+相对于上游 `0.15.2`，本 fork 增加了以下内容：
 
-1. **In-app language selection** — a `View → Language` menu lets the user pick
-   a UI language from any locale shipped in
-   `app/main-process/i18n/*.json`. The choice is persisted to the existing
-   `view-settings.json` in Electron's `userData` directory and survives across
-   restarts. Without a saved choice the app falls back to
-   `electron.app.getLocale()` (the original behaviour).
-2. **Completed Simplified Chinese (`zh-CN`) translation** — covers ~100% of
-   extractable strings, fixes several mistranslations and untranslated
-   placeholders present in the upstream `zh-CN.json`.
-3. **Translated "Writing with ink" documentation to Simplified Chinese**
-   (`WritingWithInk.zh-CN.md`, ~3400 lines). All ink code blocks are kept
-   verbatim; English heading text is preserved verbatim with the Chinese
-   translation appearing as an italic subtitle below, so every anchor ID and
-   internal cross-reference still matches the English source. The
-   documentation window automatically picks the localized HTML when the
-   current locale has a matching translation, falling back to English
-   otherwise.
+1. **应用内语言切换** —— 在 `View → Language`（中文界面下为
+   `视图 → 语言`）下提供一个子菜单，让用户从
+   `app/main-process/i18n/*.json` 中任选一种 UI 语言。所选语言会被写入
+   Electron `userData` 目录下已有的 `view-settings.json`，重启后仍生效。
+   未设置时回退到 `electron.app.getLocale()`（与上游行为一致）。
+2. **完整的简体中文（`zh-CN`）翻译** —— 覆盖约 100% 可提取字符串，
+   并修正了上游 `zh-CN.json` 中若干错译和遗漏占位符。
+3. **《Writing with ink》文档的简体中文翻译**
+   （`WritingWithInk.zh-CN.md`，约 3400 行）。所有 ink 代码块按原文
+   逐字保留；英文标题原样保留，中文翻译以斜体小标题形式出现在其下方，
+   这样每个 anchor ID 与文档内部交叉引用都能继续指向英文源文档。
+   文档窗口会在当前 locale 有对应翻译时自动加载本地化 HTML，否则回退
+   到英文版。
 
-Files touched:
+涉及修改 / 新增的文件：
 
-- `app/main-process/i18n/i18n.js` — added `init()` and `availableLocales()`
-- `app/main-process/i18n/zh-CN.json` — UI translations
-- `app/main-process/appmenus.js` — new `Language` submenu
-- `app/main-process/main.js` — load persisted language; add `changeLanguage` handler
-- `app/main-process/projectWindow.js` — added `language` key to view-settings defaults
-- `app/main-process/documentationWindow.js` — pick `window.<locale>.html` when present
-- `app/package.json` — postinstall builds localized docs after the English ones
-- `build/createDocumentnavigation.js` — accepts optional locale arg to build `window.<locale>.html`
-- `build/buildLocalizedDocs.js` — new; scans for `WritingWithInk.<locale>.md` and runs the pipeline
-- `app/resources/Documentation/WritingWithInk.zh-CN.md` — Chinese translation
-- `NOTICE.md`, `README.md` — attribution and fork notes
+- `app/main-process/i18n/i18n.js` —— 新增 `init()` 与 `availableLocales()`
+- `app/main-process/i18n/zh-CN.json` —— UI 翻译
+- `app/main-process/appmenus.js` —— 新增 `Language` 子菜单
+- `app/main-process/main.js` —— 启动时加载持久化的语言；新增
+  `changeLanguage` 处理逻辑
+- `app/main-process/projectWindow.js` —— 在 view-settings 默认值中加入
+  `language` 字段
+- `app/main-process/documentationWindow.js` —— 当存在
+  `window.<locale>.html` 时优先加载本地化文档
+- `app/package.json` —— `postinstall` 在英文版文档生成之后，自动构建
+  本地化文档
+- `build/createDocumentnavigation.js` —— 接受可选的 locale 参数，用于
+  生成 `window.<locale>.html`
+- `build/buildLocalizedDocs.js` —— 新增；扫描所有
+  `WritingWithInk.<locale>.md` 并依次跑构建管线
+- `app/resources/Documentation/WritingWithInk.zh-CN.md` —— 简体中文翻译
+- `NOTICE.md`、`README.md` —— 署名与 fork 说明
 
-## License of changes
+## 改动部分的许可证
 
-The changes introduced in this fork are released under the **MIT License**,
-matching the upstream `package.json` declaration. By contributing to this fork
-or using its modifications you accept that they are made available under the
-same terms.
+本 fork 引入的所有改动以 **MIT 许可证** 发布，与上游 `package.json` 中
+的声明一致。你为本 fork 贡献代码或使用其改动，即视为接受同样的许可
+条款。
 
-If inkle Ltd. (the original author) requests changes to attribution or wants
-this fork taken down, please open an issue on this repository.
+如 inkle Ltd.（原作者）希望我们调整署名方式，或希望本 fork 下架，
+请在本仓库 issues 中告知，我们会配合处理。
